@@ -30,7 +30,6 @@ export class TeamService {
     let response = new ResponseObj();
     try {
       const result = await this.teamRepo.insertTeam(payload);
-      console.log('result: ', result);
       response.message = "Thêm mới CLB thành công";
       return response;
     } catch (error) {
@@ -43,7 +42,6 @@ export class TeamService {
     let response = new ResponseObj();
     try {
       const result = await this.teamRepo.updateTeam(payload);
-      console.log('result: ', result);
       response.message = "Cập nhật thông tin CLB thành công";
       return response;
     } catch (error) {
@@ -56,7 +54,6 @@ export class TeamService {
     let response = new ResponseObj();
     try {
       const result = await this.teamRepo.deletedTeam(payload);
-      console.log('result: ', result);
       response.message = "Cập nhật thông tin CLB thành công";
       return response;
     } catch (error) {

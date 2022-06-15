@@ -30,7 +30,6 @@ export class KhoathiService {
     let response = new ResponseObj();
     try {
       const result = await this.KhoathiRepo.insertKhoathi(payload);
-      console.log('result: ', result);
       response.message = "Thêm mới khóa thi thành công";
       return response;
     } catch (error) {
@@ -43,7 +42,6 @@ export class KhoathiService {
     let response = new ResponseObj();
     try {
       const result = await this.KhoathiRepo.updateKhoathi(payload);
-      console.log('result: ', result);
       response.message = "Cập nhật thông tin khóa thi thành công";
       return response;
     } catch (error) {
@@ -56,7 +54,6 @@ export class KhoathiService {
     let response = new ResponseObj();
     try {
       const result = await this.KhoathiRepo.deletedKhoathi(payload);
-      console.log('result: ', result);
       response.message = "Xóa khóa thi thành công";
       return response;
     } catch (error) {
@@ -69,7 +66,6 @@ export class KhoathiService {
     let response = new ResponseObj();
     try {
       const result = await this.KhoathiRepo.updateStatusKhoathi(payload);
-      console.log('result: ', result);
       response.message = "Cập nhật trạng thái khóa thi thành công";
       return response;
     } catch (error) {

@@ -30,7 +30,6 @@ export class ChamThiService {
     let response = new ResponseObj();
     try {
       const result = await this.chamthiRepo.insertChamthi(payload);
-      console.log('result: ', result);
       response.message = "Thêm mới Item Chấm thi thành công";
       return response;
     } catch (error) {
@@ -43,7 +42,6 @@ export class ChamThiService {
     let response = new ResponseObj();
     try {
       const result = await this.chamthiRepo.updateChamthi(payload);
-      console.log('result: ', result);
       response.message = "Cập nhật thông tin Item Chấm thi thành công";
       return response;
     } catch (error) {
@@ -56,7 +54,6 @@ export class ChamThiService {
     let response = new ResponseObj();
     try {
       const result = await this.chamthiRepo.deletedChamthi(payload);
-      console.log('result: ', result);
       response.message = "Xóa thông tin Item Chấm thi thành công";
       return response;
     } catch (error) {
@@ -81,8 +78,5 @@ export class ChamThiService {
       return response;
     }
   }
-
-}
-const level = {
 
 }
