@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, ValidationPipe } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ResponseObj } from "src/shared";
-import { ChamThiDTO, UploadFile } from "./dto";
+import { ChamThiDTO, ScoreSpeed, UploadFile } from "./dto";
 import { ChamThiService } from "./chamthi.service";
 
 @ApiTags('Quản lý Danh sách chấm thi')
@@ -63,5 +63,16 @@ export class ChamThiController {
   })
   async uploadListChamThi(@Body(ValidationPipe) data: UploadFile): Promise<ResponseObj> {
     return this.chamthiService.uploadListChamThi(data);
+  }
+
+  @Post('set-point-with-khoathi')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Upload danh sách thi theo sheet'
+  })
+  async scoreSpeed(@Body(ValidationPipe) data: ScoreSpeed): Promise<ResponseObj> {
+    return this.chamthiService.scoreSpeed(data);
   }
 }

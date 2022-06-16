@@ -88,14 +88,12 @@ export class KhoathiRepository extends Repository<any>{
     SET
       STATUS = '${payload.khoathi_status}',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.created_by}'
+      MODIFIED_BY = '${payload.modified_by}'
     WHERE ID = '${payload.khoathi_code}';
   `;
     const someQuery = entityManager.query(sql);
     return someQuery;
   }
-
-
 }
 
 

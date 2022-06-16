@@ -79,3 +79,22 @@ export class UploadFile {
   @ApiProperty({ description: 'Mã khóa thi', default: 0 })
   khoathi_code: string;
 }
+
+export class ScoreSpeed {
+
+  @ApiProperty({ description: 'điểm thi', default: 0 })
+  diem: number; 
+
+  @ApiProperty({ description: 'Mã Nội dung thi', default: "" })
+  content_code: string; 
+
+  @ApiProperty({ description: 'Mã khóa thi', default: "" })
+  khoathi_code: string; 
+
+  @ApiProperty({ description: 'Mã Đẳng cấp', default: "" })
+  level_code: string;  
+
+  @ApiProperty({ description: 'Người tạo', default: "" })
+  modified_by: string;
+
+}

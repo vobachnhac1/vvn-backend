@@ -100,7 +100,8 @@ export class ChamThiRepository extends Repository<any>{
     const someQuery = entityManager.query(sql);
     console.log('sql: ', sql);
     return someQuery;
-  }
+  } 
+  
 
   async deletedChamthi(payload: ChamThiDTO): Promise<ChamThiDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
@@ -114,6 +115,39 @@ export class ChamThiRepository extends Repository<any>{
     WHERE ID = '${payload.mathi}';
   `;
     const someQuery = entityManager.query(sql);
+    return someQuery;
+  }
+
+  async scoreSpeed(payload: ChamThiDTO): Promise<ChamThiDTO[]> {
+    const {
+      diem_cb,
+      diem_dk,
+      diem_dl,
+      diem_lt,
+      diem_sl,
+      diem_tl,
+      khoathi_code,   
+      level_code
+    } = payload;
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    const sql = `
+    UPDATE 
+      binhtamao7ys_MOBILE.VVN_CHAMTHI
+    SET
+      ${ diem_cb? " DIEM_CB = '" + diem_cb + "'," : ""}
+      ${ diem_dk? " DIEM_DK = '" + diem_dk + "'," : ""}
+      ${ diem_dl? " DIEM_DL = '" + diem_dl + "'," : ""}
+      ${ diem_lt? " DIEM_LT = '" + diem_lt + "'," : ""}
+      ${ diem_sl? " DIEM_SL = '" + diem_sl + "'," : ""}
+      ${ diem_tl? " DIEM_TL = '" + diem_tl + "'," : ""}
+      MODIFIED_DATE = now(),
+      MODIFIED_BY = '${payload.modified_by}'
+    WHERE  LEVEL = '${level_code}'
+      AND KHOATHI = '${khoathi_code}'
+    ;
+  `;
+    const someQuery = entityManager.query(sql);
+    console.log('sql: ', sql);
     return someQuery;
   }
 

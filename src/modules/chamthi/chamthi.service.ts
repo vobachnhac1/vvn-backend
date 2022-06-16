@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Logger } from "src/logging";
 import { ResponseObj } from "src/shared";
-import { ChamThiDTO, UploadFile } from "./dto";
+import { ChamThiDTO, ScoreSpeed, UploadFile } from "./dto";
 import { ChamThiRepository } from "./chamthi.repository";
 const __ = require('lodash');
 
@@ -78,5 +78,50 @@ export class ChamThiService {
       return response;
     }
   }
-
+    
+    
+  async scoreSpeed( payload: ScoreSpeed): Promise<ResponseObj> {
+    let response = new ResponseObj();
+    try {
+      const param:ChamThiDTO = new ChamThiDTO();
+      param.diem_cb = CHILD_OF_KHOATHI[0].id === payload.content_code ?  payload.diem : null ;
+      param.diem_dk = CHILD_OF_KHOATHI[2].id === payload.content_code ?  payload.diem : null ;
+      param.diem_dl = CHILD_OF_KHOATHI[1].id === payload.content_code ?  payload.diem : null ;
+      param.diem_tl = CHILD_OF_KHOATHI[3].id === payload.content_code ?  payload.diem : null ;
+      param.diem_lt = CHILD_OF_KHOATHI[5].id === payload.content_code ?  payload.diem : null ;
+      param.diem_sl = CHILD_OF_KHOATHI[4].id === payload.content_code ?  payload.diem : null ;
+      param.modified_by = payload.modified_by;
+      param.khoathi_code = payload.khoathi_code;
+      param.level_code = payload.level_code;
+      const result = await this.chamthiRepo.scoreSpeed(param);
+      response.message = "Cập nhật điểm thành công";
+      return response;
+    } catch (error) {
+      this.logger.error("Cập nhật điểm scoreSpeed", error)
+      return response;
+    }
+  }
+  
 }
+export const CHILD_OF_KHOATHI = [
+  {
+    id:   'CANBAN',
+    name: 'Căn bản'
+  },
+  {
+    id:   'DONLUYEN',
+    name: 'Đơn luyện'
+  },{
+    id:   'DOIKHANG',
+    name: 'Đối kháng'
+  },{
+    id:   'THELUC',
+    name: 'Thể Lực'
+  },{
+    id:   'SONGLUYEN',
+    name: 'Song luyện'
+  },{
+    id:   'LYTHUYET',
+    name: 'Lý thuyết'
+  }
+];
