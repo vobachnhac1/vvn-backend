@@ -32,11 +32,12 @@ export class KhoathiRepository extends Repository<any>{
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
     INSERT INTO binhtamao7ys_MOBILE.VVN_KHOATHI
-      ( NAME, ADDRESS, CREATED_DATE, CREATED_BY, NOTE)
+      ( NAME, ADDRESS, TYPE, CREATED_DATE, CREATED_BY, NOTE)
     VALUES
       (
         '${payload.khoathi_name}',
         '${payload.khoathi_address}',
+        '${payload.khoathi_type}',
         now(),
         '${payload.created_by}',
         '${payload.khoathi_note}'
