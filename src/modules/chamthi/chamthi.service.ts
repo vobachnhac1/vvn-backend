@@ -79,7 +79,6 @@ export class ChamThiService {
     }
   }
     
-    
   async scoreSpeed( payload: ScoreSpeed): Promise<ResponseObj> {
     let response = new ResponseObj();
     try {
@@ -102,6 +101,32 @@ export class ChamThiService {
     }
   }
   
+  async sortRank (payload: ChamThiDTO) :Promise<ResponseObj> {
+    let response = new ResponseObj();
+    try {
+      const list = await this.chamthiRepo.sortRank(payload);
+      response.data = list;
+      response.message = "Lấy danh sách xếp hạng thành công";
+      return response;
+    } catch (error) {
+      this.logger.error("sortRank", error)
+      return response;
+    }
+  }  
+  
+  async downloadFile (payload: ChamThiDTO) :Promise<ResponseObj> {
+    let response = new ResponseObj();
+    try {
+      const {khoathi_code} =payload;
+      const list = await this.chamthiRepo.downloadFile(khoathi_code);
+      response.data = list;
+      response.message = "Lấy danh sách tổng thành công";
+      return response;
+    } catch (error) {
+      this.logger.error("downloadFile", error)
+      return response;
+    }
+  }
 }
 export const CHILD_OF_KHOATHI = [
   {

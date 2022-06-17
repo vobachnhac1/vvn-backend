@@ -70,9 +70,31 @@ export class ChamThiController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Upload danh sách thi theo sheet'
+    description: 'Cập nhật điểm nhanh'
   })
   async scoreSpeed(@Body(ValidationPipe) data: ScoreSpeed): Promise<ResponseObj> {
     return this.chamthiService.scoreSpeed(data);
+  }
+
+  @Post('sort-rank')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Upload danh sách thi theo sheet'
+  })
+  async sortRank(@Body(ValidationPipe) data: ChamThiDTO): Promise<ResponseObj> {
+    return this.chamthiService.sortRank(data);
+  }
+
+  @Post('download-file')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Upload danh sách thi theo sheet'
+  })
+  async downloadFile(@Body(ValidationPipe) data: ChamThiDTO): Promise<ResponseObj> {
+    return this.chamthiService.downloadFile(data);
   }
 }
