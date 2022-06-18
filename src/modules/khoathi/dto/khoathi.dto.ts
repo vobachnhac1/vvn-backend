@@ -35,5 +35,8 @@ export class KhoathiDTO {
   
   @ApiProperty({ description: 'Người tạo', default: "" })
   modified_by: string;
+  
+  @ApiProperty({ description: 'Tài khoản', default: "" })
+  username: string;
 
 }

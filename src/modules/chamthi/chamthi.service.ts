@@ -65,9 +65,9 @@ export class ChamThiService {
   async uploadListChamThi(payload: UploadFile): Promise<ResponseObj> {
     let response = new ResponseObj();
     try {
-      const{data, user_id} = payload;
+      const{data, username} = payload;
       for(let i =0; i<data.length; i++){
-          await this.chamthiRepo.insertChamthi(data[i]);
+          await this.chamthiRepo.insertChamthi({...data[i], username});
       }
       // const result = await this.chamthiRepo.deletedChamthi(payload);
       // console.log('result: ', result);

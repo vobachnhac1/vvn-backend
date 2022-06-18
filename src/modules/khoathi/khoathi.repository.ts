@@ -39,7 +39,7 @@ export class KhoathiRepository extends Repository<any>{
         '${payload.khoathi_address}',
         '${payload.khoathi_type}',
         now(),
-        '${payload.created_by}',
+        '${payload.username}',
         '${payload.khoathi_note}'
       );
   `;
@@ -59,7 +59,7 @@ export class KhoathiRepository extends Repository<any>{
       TYPE          = '${payload.khoathi_type}',
       
       MODIFIED_DATE = now(),
-      MODIFIED_BY   = '${payload.created_by}'
+      MODIFIED_BY   = '${payload.username}'
     WHERE ID = '${payload.khoathi_code}';
   `;
     const someQuery = entityManager.query(sql);
@@ -74,7 +74,7 @@ export class KhoathiRepository extends Repository<any>{
     SET
       ISDEL = 'Y',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.created_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.khoathi_code}';
   `;
     const someQuery = entityManager.query(sql);
@@ -89,7 +89,7 @@ export class KhoathiRepository extends Repository<any>{
     SET
       STATUS = '${payload.khoathi_status}',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.modified_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.khoathi_code}';
   `;
     const someQuery = entityManager.query(sql);

@@ -57,7 +57,7 @@ export class ChamThiRepository extends Repository<any>{
         '${payload.dob}',
         '${payload.team}',
         now(),
-        '${payload.created_by}'
+        '${payload.username}'
       );
   `;
     const someQuery = entityManager.query(sql);
@@ -103,7 +103,7 @@ export class ChamThiRepository extends Repository<any>{
       ${ diem_sl? " DIEM_SL = '" + diem_sl + "'," : ""}
       ${ diem_tl? " DIEM_TL = '" + diem_tl + "'," : ""}
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.modified_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.mathi}';
   `;
     const someQuery = entityManager.query(sql);
@@ -118,7 +118,7 @@ export class ChamThiRepository extends Repository<any>{
     SET
       ISDEL = 'Y',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.created_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.mathi}';
   `;
     const someQuery = entityManager.query(sql);
@@ -156,7 +156,7 @@ export class ChamThiRepository extends Repository<any>{
       ${ diem_tl? " DIEM_TL = '" + diem_tl + "'," : ""}
       DIEM_TONG =  ${_diem_cb } + ${ _diem_dk } + ${_diem_dl } + ${_diem_lt } + ${_diem_sl } + ${_diem_tl} ,
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.modified_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE  LEVEL = '${level_code}'
       ${ diem_cb? "AND DIEM_CB IN ('0.0')" : ""}
       ${ diem_dk? "AND DIEM_DK IN ('0.0')" : ""}
@@ -168,7 +168,6 @@ export class ChamThiRepository extends Repository<any>{
     ;
   `;
     const someQuery = await entityManager.query(sql);
-    console.log('sql: ', sql);
     entityManager.query( "SET SQL_SAFE_UPDATES = 1");
     return someQuery;
   }
@@ -208,7 +207,6 @@ export class ChamThiRepository extends Repository<any>{
     ${level_code? " AND LEVEL = '" + level_code +"'" :""}
   `;
     const someQuery = entityManager.query(sql);
-    console.log('sql: ', sql);
     return someQuery;
   }
 

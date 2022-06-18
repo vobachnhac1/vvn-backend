@@ -66,12 +66,16 @@ export class ChamThiDTO {
   @ApiProperty({ description: 'Người tạo', default: "" })
   modified_by: string;
 
+  @ApiProperty({ description: 'Tài khoản', default: "" })
+  username: string;
+
+
 }
 
 export class UploadFile {
   
-  @ApiProperty({ description: 'user_id', default: 0 })
-  user_id: string;
+  @ApiProperty({ description: 'Tài khoản', default: "" })
+  username: string;
 
   @ApiProperty({ description: 'danh sách', default: 0 })
   data: ChamThiDTO[];
@@ -96,5 +100,8 @@ export class ScoreSpeed {
 
   @ApiProperty({ description: 'Người tạo', default: "" })
   modified_by: string;
+
+  @ApiProperty({ description: 'Tài khoản', default: "" })
+  username: string
 
 }

@@ -36,7 +36,7 @@ export class TeamRepository extends Repository<any>{
         '${payload.team_name}',
         '${payload.team_address}',
         now(),
-        '${payload.created_by}',
+        '${payload.username}',
         '${payload.team_note}'
       );
   `;
@@ -54,7 +54,7 @@ export class TeamRepository extends Repository<any>{
       ADDRESS  = '${payload.team_address}',
       NOTE = '${payload.team_note}',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.created_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.team_code}';
   `;
     const someQuery = entityManager.query(sql);
@@ -69,7 +69,7 @@ export class TeamRepository extends Repository<any>{
     SET
       ISDEL = 'Y',
       MODIFIED_DATE = now(),
-      MODIFIED_BY = '${payload.created_by}'
+      MODIFIED_BY = '${payload.username}'
     WHERE ID = '${payload.team_code}';
   `;
     const someQuery = entityManager.query(sql);

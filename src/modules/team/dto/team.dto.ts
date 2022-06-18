@@ -28,6 +28,9 @@ export class TeamDTO {
   modified_date: Date; 
   
   @ApiProperty({ description: 'Người tạo', default: "" })
-  modified_by: string;
+  modified_by: string;  
+  
+  @ApiProperty({ description: 'tài khoản', default: "" })
+  username: string;
 
 }
