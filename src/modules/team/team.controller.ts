@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UseGuards, ValidationPipe } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ResponseObj } from "src/shared";
+import { GetCurrentUser } from "../login/decorators";
 import { TeamDTO } from "./dto";
 import { TeamService } from "./team.service";
 
@@ -16,7 +17,8 @@ export class TeamController {
     status: 200,
     description: 'lấy danh sách câu lạc bộ'
   })
-  async searchTeam(@Body(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
+  async searchTeam(
+    @GetCurrentUser(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
     return this.teamService.searchTeam(data);
   }
 

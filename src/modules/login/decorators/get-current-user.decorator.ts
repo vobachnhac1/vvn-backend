@@ -5,15 +5,16 @@
 * Created: 2022-03-30
 *------------------------------------------------------- */
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { ProfileAccount } from '../../auth/types';
+import { LoginDTO } from '../dto';
 import jwt_decode from "jwt-decode";
 
-export const GetCurrentUserId = createParamDecorator(
-  (data: string, context: ExecutionContext): string => {
+export const GetCurrentUser = createParamDecorator(
+  (data: keyof any | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization;
     const decoded: any = !token ? null : jwt_decode(token.replace('Bearer ', ''));
-    const user = decoded?.user as ProfileAccount;
-    return !user ? "" : user.user_id;
+    const user = decoded?.user as LoginDTO;
+    if (!data) return user;
+    return user[data];
   },
-);
+); 

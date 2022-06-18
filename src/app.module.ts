@@ -10,15 +10,14 @@ import { RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { configuration } from './config';
-import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { KhoathiModule } from './modules/khoathi/khoathi.module';
 import { TeamModule } from './modules/team/team.module';
 import { ChamThiModule } from './modules/chamthi/chamthi.module';
+import { LoginModule } from './modules/login/login.module';
 
 @Module({
   imports: [
-    AuthModule,
     PassportModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -28,14 +27,11 @@ import { ChamThiModule } from './modules/chamthi/chamthi.module';
     ScheduleModule.forRoot(),
     RouterModule.register([
       // đăng ký 1 route và path muốn kết nối
-      {
-        path: '/',
-        module: AuthModule
-      }
     ]),
     TeamModule,
     KhoathiModule,
     ChamThiModule,
+    LoginModule,
   ],
   // controllers: [AppController],
   providers: [AppService],
