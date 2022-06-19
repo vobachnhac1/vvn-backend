@@ -9,7 +9,14 @@ export class LoginRepository extends Repository<any>{
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
     INSERT INTO binhtamao7ys_MOBILE.VVN_ACCOUNT
-      ( username, password, fullname, avatarUrl, devicesInfo, 
+      ( 
+        username,
+        password,
+        fullname,
+        avatarUrl, 
+        devicesInfo, 
+        email,
+        phone,
         expired_token,
         updated_token,
         created_token
@@ -21,6 +28,8 @@ export class LoginRepository extends Repository<any>{
         '${payload.fullname}',
         '${payload.avatar_url}',
         '${payload.devices_info}',
+        '${payload.email}',
+        '${payload.phone}',
         now(),
         now(),
         now()
@@ -43,6 +52,8 @@ export class LoginRepository extends Repository<any>{
         roles,
         hash,
         position,
+        phone,
+        email,
         devicesInfo as device_info,
         createdDate as created_date,
       updatedDate as updated_date
@@ -56,7 +67,6 @@ export class LoginRepository extends Repository<any>{
     return someQuery;
   }  
   
-  
   async searchAccount(payload: LoginDTO): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
@@ -69,6 +79,8 @@ export class LoginRepository extends Repository<any>{
         roles,
         hash,
         position,
+        phone,
+        email,
         devicesInfo as device_info,
         createdDate as created_date,
       updatedDate as updated_date
@@ -95,18 +107,21 @@ export class LoginRepository extends Repository<any>{
   }
 
   async updateProfile(payload: LoginDTO): Promise<LoginDTO[]> {
-    const {roles, avatar_url, fullname, devices_info, username}= payload
+    const {roles, avatar_url, fullname, devices_info,email, phone, username, position}= payload
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
         UPDATE 
           binhtamao7ys_MOBILE.VVN_ACCOUNT
         SET
+         ${position?      "position     = '" + position     +"'" : ""},
+         ${email?         "email        = '" + email        +"'" : ""},
          ${roles?         "roles        = '" + roles        +"'" : ""},
+         ${phone?         "phone        = '" + phone        +"'" : ""},
          ${avatar_url?    "avatarUrl    = '" + avatar_url   +"'" : ""},
          ${fullname?      "fullname     = '" + fullname     +"'" : ""},
          ${devices_info?  "devicesInfo  = '" + devices_info +"'" : ""},
          updatedDate = now()
-        WHERE upper(username) = upper('${payload.username}')
+        WHERE upper(username) = upper('${username}')
     `;
     const someQuery = entityManager.query(sql);
     return someQuery;

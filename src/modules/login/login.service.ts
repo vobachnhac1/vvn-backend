@@ -124,6 +124,8 @@ export class LoginService {
         devices_info:   user.devices_info,
         created_date:   user.created_date,
         updated_date:   user.updated_date,
+        phone:   user.phone,
+        email:   user.email,
     };
   }
 }

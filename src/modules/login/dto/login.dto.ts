@@ -27,6 +27,12 @@ export class LoginDTO {
   @ApiProperty({ description: 'Chức vụ', default: "" })
   position: string;
 
+  @ApiProperty({ description: 'Số điện thoại', default: "" })
+  phone:     string;  
+  
+  @ApiProperty({ description: 'Thư điện tử', default: "" })
+  email:     string; 
+
   @ApiProperty({ description: 'Ngày tạo', default: "" })
   created_date: Date;  
 
@@ -90,6 +96,12 @@ export class ResponsePayLoad {
   
   @ApiProperty({ description: 'Chức vụ', default: "" })
   position:     string;  
+  
+  @ApiProperty({ description: 'Số điện thoại', default: "" })
+  phone:     string;  
+
+  @ApiProperty({ description: 'Thư điện tử', default: "" })
+  email:     string; 
   
   @ApiProperty({ description: 'access_token', default: "" })
   access_token:     string; 
