@@ -127,7 +127,22 @@ export class ChamThiService {
       return response;
     }
   }
+  async getTeamByKhoathi (payload: string) :Promise<ResponseObj> {
+    let response = new ResponseObj();
+    try {
+      // const {} =payload;
+      const list = await this.chamthiRepo.getTeamByKhoathi(payload);
+      response.data = list;
+      response.message = "Lấy danh sách tổng thành công";
+      return response;
+    } catch (error) {
+      this.logger.error("downloadFile", error)
+      return response;
+    }
+  }
 }
+
+
 export const CHILD_OF_KHOATHI = [
   {
     id:   'CANBAN',

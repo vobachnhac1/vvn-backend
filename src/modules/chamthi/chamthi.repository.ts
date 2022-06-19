@@ -279,6 +279,20 @@ export class ChamThiRepository extends Repository<any>{
       lengthContent: rsContent.length
     };
   }
+
+  async getTeamByKhoathi(payload: string): Promise<ChamThiDTO[]> {
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    const sql = `
+    SELECT 
+      ROW_NUMBER() OVER (ORDER BY TB.TEAM DESC) AS ord_numbers,
+      TB.TEAM as team
+    FROM (
+    select distinct TEAM  from 	binhtamao7ys_MOBILE.VVN_CHAMTHI where KHOATHI = '${payload}'
+    ) TB
+  `;
+    const someQuery = entityManager.query(sql);
+    return someQuery;
+  }
 } 
 
 

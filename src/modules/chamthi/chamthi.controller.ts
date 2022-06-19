@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, ValidationPipe } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ResponseObj } from "src/shared";
 import { ChamThiDTO, ScoreSpeed, UploadFile } from "./dto";
@@ -96,5 +96,17 @@ export class ChamThiController {
   })
   async downloadFile(@Body(ValidationPipe) data: ChamThiDTO): Promise<ResponseObj> {
     return this.chamthiService.downloadFile(data);
+  }
+
+  @Get('get-team-by-khoathi/:khoathi_code')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Lấy danh sách câu lạc bộ theo khóa thi'
+  })
+  async getTeamByKhoathi(@Param('khoathi_code') khoathi_code): Promise<ResponseObj> {
+
+    return this.chamthiService.getTeamByKhoathi(khoathi_code);
   }
 }
