@@ -31,4 +31,16 @@ export class LoginController {
     return this.loginService.login(data);
   }
 
+  @Post('update-profile')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'cập nhật profile'
+  })
+  async updateProfile(@Body(ValidationPipe) data: LoginDTO): Promise<ResponseObj> {
+    return this.loginService.updateProfile(data);
+  }
+
+
 }
