@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Logger } from "src/logging";
 import { ResponseObj } from "src/shared";
-import { ChamThiDTO, ScoreSpeed, UploadFile } from "./dto";
+import { ChamThiDTO, ListUpdate, ScoreSpeed, UploadFile } from "./dto";
 import { ChamThiRepository } from "./chamthi.repository";
 const __ = require('lodash');
 
@@ -38,10 +38,16 @@ export class ChamThiService {
     }
   }
 
-  async updateChamthi(payload: ChamThiDTO): Promise<ResponseObj> {
+  async updateChamthi(payload: ListUpdate): Promise<ResponseObj> {
     let response = new ResponseObj();
+    const { data, username} =payload
     try {
-      const result = await this.chamthiRepo.updateChamthi(payload);
+      for(let i=0; i< data.length; i++){
+        const result = await this.chamthiRepo.updateChamthi({
+          ...data[i],
+          username
+        });
+      }
       response.message = "Cập nhật thông tin Item Chấm thi thành công";
       return response;
     } catch (error) {

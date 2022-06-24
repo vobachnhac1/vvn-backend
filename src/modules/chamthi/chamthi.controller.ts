@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, ValidationPipe } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ResponseObj } from "src/shared";
-import { ChamThiDTO, ScoreSpeed, UploadFile } from "./dto";
+import { ChamThiDTO, ListUpdate, ScoreSpeed, UploadFile } from "./dto";
 import { ChamThiService } from "./chamthi.service";
 
 @ApiTags('Quản lý Danh sách chấm thi')
@@ -38,7 +38,7 @@ export class ChamThiController {
     status: 200,
     description: 'Cập nhật item chấm thi'
   })
-  async updateChamthi(@Body(ValidationPipe) data: ChamThiDTO): Promise<ResponseObj> {
+  async updateChamthi(@Body(ValidationPipe) data: ListUpdate): Promise<ResponseObj> {
     return this.chamthiService.updateChamthi(data);
   }
 

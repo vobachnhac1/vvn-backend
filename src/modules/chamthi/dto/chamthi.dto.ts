@@ -72,6 +72,12 @@ export class ChamThiDTO {
 
 }
 
+export class ListUpdate {
+  @ApiProperty({ description: 'danh sách update', default: 0 })
+  data: ChamThiDTO[]
+  @ApiProperty({ description: 'Tài khoản', default: "" })
+  username: string;
+}
 export class UploadFile {
   
   @ApiProperty({ description: 'Tài khoản', default: "" })
