@@ -24,9 +24,7 @@ export class LoginService {
     // try {
        //check JWT
       const arrUser = await this.loginRepo.verifyAccount(payload.username, payload.password);
-      console.log('arrUser: ', arrUser);
-
-      if (!arrUser) throw new ForbiddenException('Access Denied 1');
+       if (!arrUser) throw new ForbiddenException('Access Denied 1');
       const user: LoginDTO = __.head(arrUser);
       const _hash = await argon.hash(payload.password);
       const passwordMatches = await argon.verify(user.password, payload.password);
@@ -42,23 +40,23 @@ export class LoginService {
   async registerAccount(payload: LoginDTO): Promise<ResponseObj> {
     let response = new ResponseObj();
     // try {
-      const {password, username} = payload;
-      const hash = await argon.hash(payload.password);
-      const account:LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
-      if (account.length > 0) {
-        throw new ForbiddenException('The account has been registered');
-      }
-      const paramInsert = {
-        ...payload,
-        password: hash
-      }
-       // đăng ký mới thành công
-      await this.loginRepo.registerAccount(paramInsert);
-      const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
-      const user = {
-        ...userTemp[0],
-        userId: userTemp[0].id,
-        username: payload.username
+    const {password, username} = payload;
+    const hash = await argon.hash(payload.password);
+    const account:LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+    if (account.length > 0) {
+      throw new ForbiddenException('The account has been registered');
+    }
+    const paramInsert = {
+      ...payload,
+      password: hash
+    }
+      // đăng ký mới thành công
+    await this.loginRepo.registerAccount(paramInsert);
+    const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+    const user = {
+      ...userTemp[0],
+      userId: userTemp[0].id,
+      username: payload.username
     }
     const tokens = await this.getTokens(user.userId, user.username, user );
     await this.updateRtHash(user.userId, tokens.refresh_token);
@@ -66,10 +64,31 @@ export class LoginService {
     return response;
   }
 
-  async resetPassword(payload: LoginDTO): Promise<ResponseObj> {
+  async resetPassword(payload: TokenGenerationReq): Promise<ResponseObj> {
     let response = new ResponseObj();
+    const {password, username, passwordnew} = payload;
+    const hash = await argon.hash(passwordnew);
+    const paramInsert:TokenGenerationReq = {
+      username:username,
+      password: null,
+      passwordnew: hash
+    }
     try {
-      const result = await this.loginRepo.resetPassword(payload);
+      const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+      const user = {
+        ...userTemp[0],
+        userId: userTemp[0].id,
+        username: username
+      }
+      const passwordMatches = await argon.verify(user.password, password);
+      if(!passwordMatches){
+        response.success =false;
+        response.message= "Mật khẩu không thành công"
+        return response;
+      }
+      await this.loginRepo.resetPassword(paramInsert);
+      const tokens = await this.getTokens(user.userId, user.username, user );
+      await this.updateRtHash(user.userId, tokens.refresh_token);
       response.message = "Reset mật khẩu thành thành công";
       return response;
     } catch (error) {

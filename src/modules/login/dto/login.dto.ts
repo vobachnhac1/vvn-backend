@@ -69,6 +69,9 @@ export class TokenGenerationReq {
   @IsNotEmpty()
   @ApiProperty()
   password: string;
+
+  @ApiProperty()
+  passwordnew: string;
 }
 
 

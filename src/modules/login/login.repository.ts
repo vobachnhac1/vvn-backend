@@ -1,6 +1,6 @@
 
 import { getConnectionManager, Repository } from "typeorm";
-import { LoginDTO } from "./dto";
+import { LoginDTO, TokenGenerationReq } from "./dto";
 
 export class LoginRepository extends Repository<any>{
 
@@ -92,13 +92,13 @@ export class LoginRepository extends Repository<any>{
     return someQuery;
   } 
 
-  async resetPassword(payload: LoginDTO): Promise<LoginDTO[]> {
+  async resetPassword(payload: TokenGenerationReq): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
         UPDATE 
           binhtamao7ys_MOBILE.VVN_ACCOUNT
         SET
-          password = '${payload.password}',
+          password = '${payload.passwordnew}',
           updatedDate = now()
         WHERE  upper(username) = upper('${payload.username}')
     `;

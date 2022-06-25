@@ -31,6 +31,17 @@ export class LoginController {
     return this.loginService.login(data);
   }
 
+  @Post('forget-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Reset Password'
+  })
+  async ressetPassword(@Body(ValidationPipe) data: TokenGenerationReq): Promise<ResponseObj> {
+    return this.loginService.resetPassword(data);
+  }
+
   @Post('update-profile')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
