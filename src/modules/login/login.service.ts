@@ -1,14 +1,14 @@
 const __ = require('lodash');
 import * as argon from 'argon2';
-import { ForbiddenException, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Logger } from "src/logging";
-import { ResponseObj } from "src/shared";
-import { LoginDTO, ResponsePayLoad, TokenGenerationReq } from "./dto";
-import { LoginRepository } from "./login.repository";
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Logger } from 'src/logging';
+import { ResponseObj } from 'src/shared';
+import { LoginDTO, ResponsePayLoad, TokenGenerationReq } from './dto';
+import { LoginRepository } from './login.repository';
 
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from "@nestjs/config";
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LoginService {
@@ -17,82 +17,93 @@ export class LoginService {
     private jwtService: JwtService,
     private config: ConfigService,
     @InjectRepository(LoginRepository) private loginRepo: LoginRepository,
-  ) { }
+  ) {}
 
   async login(payload: TokenGenerationReq): Promise<ResponseObj> {
     let response = new ResponseObj();
     // try {
-       //check JWT
-      const arrUser = await this.loginRepo.verifyAccount(payload.username, payload.password);
-       if (!arrUser) throw new ForbiddenException('Access Denied 1');
-      const user: LoginDTO = __.head(arrUser);
-      const _hash = await argon.hash(payload.password);
-      const passwordMatches = await argon.verify(user.password, payload.password);
-      if (!passwordMatches) throw new ForbiddenException('Access Denied 2');
-      const tokens = await this.getTokens(user.id, user.username, user);
-      await this.updateRtHash(user.id, tokens.refresh_token);
-      response.message = "Login thành công";
-      response.data = tokens;
-      return response;
-
+    //check JWT
+    const arrUser = await this.loginRepo.verifyAccount(
+      payload.username,
+      payload.password,
+    );
+    if (!arrUser) throw new ForbiddenException('Access Denied 1');
+    const user: LoginDTO = __.head(arrUser);
+    const _hash = await argon.hash(payload.password);
+    const passwordMatches = await argon.verify(user.password, payload.password);
+    if (!passwordMatches) throw new ForbiddenException('Access Denied 2');
+    const tokens = await this.getTokens(user.id, user.username, user);
+    await this.updateRtHash(user.id, tokens.refresh_token);
+    response.message = 'Login thành công';
+    response.data = tokens;
+    return response;
   }
 
   async registerAccount(payload: LoginDTO): Promise<ResponseObj> {
     let response = new ResponseObj();
     // try {
-    const {password, username} = payload;
+    const { password, username } = payload;
     const hash = await argon.hash(payload.password);
-    const account:LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+    const account: LoginDTO[] = await this.loginRepo.verifyAccount(
+      username,
+      password,
+    );
     if (account.length > 0) {
       throw new ForbiddenException('The account has been registered');
     }
     const paramInsert = {
       ...payload,
-      password: hash
-    }
-      // đăng ký mới thành công
+      password: hash,
+    };
+    // đăng ký mới thành công
     await this.loginRepo.registerAccount(paramInsert);
-    const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+    const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(
+      username,
+      password,
+    );
     const user = {
       ...userTemp[0],
       userId: userTemp[0].id,
-      username: payload.username
-    }
-    const tokens = await this.getTokens(user.userId, user.username, user );
+      username: payload.username,
+    };
+    const tokens = await this.getTokens(user.userId, user.username, user);
     await this.updateRtHash(user.userId, tokens.refresh_token);
-    response.message = "Tạo tài khoản thành công";
+    response.message = 'Tạo tài khoản thành công';
     return response;
   }
 
   async resetPassword(payload: TokenGenerationReq): Promise<ResponseObj> {
     let response = new ResponseObj();
-    const {password, username, passwordnew} = payload;
+    const { password, username, passwordnew } = payload;
     const hash = await argon.hash(passwordnew);
-    const paramInsert:TokenGenerationReq = {
-      username:username,
+    const paramInsert: TokenGenerationReq = {
+      username: username,
       password: null,
-      passwordnew: hash
-    }
+      passwordnew: hash,
+    };
     try {
-      const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(username, password);
+      const userTemp: LoginDTO[] = await this.loginRepo.verifyAccount(
+        username,
+        password,
+      );
       const user = {
         ...userTemp[0],
         userId: userTemp[0].id,
-        username: username
-      }
+        username: username,
+      };
       const passwordMatches = await argon.verify(user.password, password);
-      if(!passwordMatches){
-        response.success =false;
-        response.message= "Mật khẩu không thành công"
+      if (!passwordMatches) {
+        response.success = false;
+        response.message = 'Mật khẩu không thành công';
         return response;
       }
       await this.loginRepo.resetPassword(paramInsert);
-      const tokens = await this.getTokens(user.userId, user.username, user );
+      const tokens = await this.getTokens(user.userId, user.username, user);
       await this.updateRtHash(user.userId, tokens.refresh_token);
-      response.message = "Reset mật khẩu thành thành công";
+      response.message = 'Reset mật khẩu thành thành công';
       return response;
     } catch (error) {
-      this.logger.error("resetPassword Login", error)
+      this.logger.error('resetPassword Login', error);
       return response;
     }
   }
@@ -101,10 +112,10 @@ export class LoginService {
     let response = new ResponseObj();
     try {
       const result = await this.loginRepo.updateProfile(payload);
-      response.message = "Cập nhật profile thành công";
+      response.message = 'Cập nhật profile thành công';
       return response;
     } catch (error) {
-      this.logger.error("updateProfile Login", error)
+      this.logger.error('updateProfile Login', error);
       return response;
     }
   }
@@ -114,37 +125,47 @@ export class LoginService {
     await this.loginRepo.updateToken(userId, hash);
   }
 
-  async getTokens(userId: string, username: string, user: LoginDTO): Promise<ResponsePayLoad> {
+  async getTokens(
+    userId: string,
+    username: string,
+    user: LoginDTO,
+  ): Promise<ResponsePayLoad> {
     const jwtPayload: any = {
-        roles: user.roles,
-        username: username,
-        userId: userId
+      roles: user.roles,
+      username: username,
+      userId: userId,
     };
 
     const [at, rt] = await Promise.all([
-        this.jwtService.signAsync({ user: jwtPayload }, {
-            secret: this.config.get<string>('AT_SECRET'),
-            expiresIn: '1d',
-        }),
-        this.jwtService.signAsync({ user: jwtPayload }, {
-            secret: this.config.get<string>('RT_SECRET'),
-            expiresIn: '7d',
-        }),
+      this.jwtService.signAsync(
+        { user: jwtPayload },
+        {
+          secret: this.config.get<string>('AT_SECRET'),
+          expiresIn: '1d',
+        },
+      ),
+      this.jwtService.signAsync(
+        { user: jwtPayload },
+        {
+          secret: this.config.get<string>('RT_SECRET'),
+          expiresIn: '7d',
+        },
+      ),
     ]);
 
     return {
-        access_token:   at,
-        refresh_token:  rt,
-        username:       user.username,
-        fullname:       user.fullname,
-        avatar_url:     user.avatar_url,
-        roles:          user.roles,
-        position:       user.position,
-        devices_info:   user.devices_info,
-        created_date:   user.created_date,
-        updated_date:   user.updated_date,
-        phone:   user.phone,
-        email:   user.email,
+      access_token: at,
+      refresh_token: rt,
+      username: user.username,
+      fullname: user.fullname,
+      avatar_url: user.avatar_url,
+      roles: user.roles,
+      position: user.position,
+      devices_info: user.devices_info,
+      created_date: user.created_date,
+      updated_date: user.updated_date,
+      phone: user.phone,
+      email: user.email,
     };
   }
 }

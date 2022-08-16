@@ -1,22 +1,33 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, ValidationPipe } from "@nestjs/common";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ResponseObj } from "src/shared";
-import { KhoathiDTO } from "./dto";
-import { KhoathiService } from "./khoathi.service";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ResponseObj } from 'src/shared';
+import { KhoathiDTO } from './dto';
+import { KhoathiService } from './khoathi.service';
 
 @ApiTags('Quản lý Khoá thi')
 @Controller('khoathi')
 export class KhoathiController {
-  constructor(private KhoathiService: KhoathiService) { }
+  constructor(private KhoathiService: KhoathiService) {}
 
   @Post('search')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'lấy danh sách Khoá thi'
+    description: 'lấy danh sách Khoá thi',
   })
-  async searchKhoathi(@Body(ValidationPipe) data: KhoathiDTO): Promise<ResponseObj> {
+  async searchKhoathi(
+    @Body(ValidationPipe) data: KhoathiDTO,
+  ): Promise<ResponseObj> {
     return this.KhoathiService.searchKhoathi(data);
   }
 
@@ -25,9 +36,11 @@ export class KhoathiController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Thêm mới Khoá thi'
+    description: 'Thêm mới Khoá thi',
   })
-  async insertKhoathi(@Body(ValidationPipe) data: KhoathiDTO): Promise<ResponseObj> {
+  async insertKhoathi(
+    @Body(ValidationPipe) data: KhoathiDTO,
+  ): Promise<ResponseObj> {
     return this.KhoathiService.insertKhoathi(data);
   }
 
@@ -36,9 +49,11 @@ export class KhoathiController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Cập nhật Khoá thi'
+    description: 'Cập nhật Khoá thi',
   })
-  async updatedKhoathi(@Body(ValidationPipe) data: KhoathiDTO): Promise<ResponseObj> {
+  async updatedKhoathi(
+    @Body(ValidationPipe) data: KhoathiDTO,
+  ): Promise<ResponseObj> {
     return this.KhoathiService.updatedKhoathi(data);
   }
 
@@ -47,9 +62,11 @@ export class KhoathiController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Xóa Khoá thi'
+    description: 'Xóa Khoá thi',
   })
-  async deletedKhoathi(@Body(ValidationPipe) data: KhoathiDTO): Promise<ResponseObj> {
+  async deletedKhoathi(
+    @Body(ValidationPipe) data: KhoathiDTO,
+  ): Promise<ResponseObj> {
     return this.KhoathiService.deletedKhoathi(data);
   }
 
@@ -58,9 +75,11 @@ export class KhoathiController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Cập nhật trạng thái Khoá thi'
+    description: 'Cập nhật trạng thái Khoá thi',
   })
-  async updateStatusKhoathi(@Body(ValidationPipe) data: KhoathiDTO): Promise<ResponseObj> {
+  async updateStatusKhoathi(
+    @Body(ValidationPipe) data: KhoathiDTO,
+  ): Promise<ResponseObj> {
     return this.KhoathiService.updateStatusKhoathi(data);
   }
 }

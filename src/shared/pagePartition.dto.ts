@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PagePartition {
   @ApiProperty({ default: 0, description: 'Tổng số data' })
@@ -12,5 +12,4 @@ export class PagePartition {
 
   @ApiProperty({ default: 0, description: 'Số data trong 1 trang' })
   item_page_index: number;
-
 }

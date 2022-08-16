@@ -6,6 +6,6 @@ import { TeamService } from './team.service';
 @Module({
   imports: [],
   controllers: [TeamController],
-  providers: [TeamService, TeamRepository]
+  providers: [TeamService, TeamRepository],
 })
-export class TeamModule { }
+export class TeamModule {}

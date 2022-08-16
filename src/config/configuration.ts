@@ -1,9 +1,9 @@
 /* --------------------------------------------------------
-* Author Võ Bách Nhạc
-* Email vonhac.20394@gmail.com
-* Phone 0906.918.738
-* Created: 2022-03-30
-*------------------------------------------------------- */
+ * Author Võ Bách Nhạc
+ * Email vonhac.20394@gmail.com
+ * Phone 0906.918.738
+ * Created: 2022-03-30
+ *------------------------------------------------------- */
 import type { Config, Objectype, Production } from './config.interface';
 
 const util = {
@@ -20,7 +20,7 @@ const util = {
       }
     }
     return { ...target, ...source };
-  }
+  },
 };
 
 export const configuration = async (): Promise<Config> => {
@@ -36,6 +36,6 @@ export const configuration = async (): Promise<Config> => {
       await import(`./envs/${envName}.local`)
     );
     environment = util.merge(environment, local);
-  } catch (ignored) { }
+  } catch (ignored) {}
   return util.merge(config, environment);
 };

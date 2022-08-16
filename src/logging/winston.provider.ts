@@ -1,9 +1,9 @@
 /* --------------------------------------------------------
-* Author Võ Bách Nhạc
-* Email vonhac.20394@gmail.com
-* Phone 0906.918.738
-* Created: 2022-03-30
-*------------------------------------------------------- */
+ * Author Võ Bách Nhạc
+ * Email vonhac.20394@gmail.com
+ * Phone 0906.918.738
+ * Created: 2022-03-30
+ *------------------------------------------------------- */
 import * as path from 'path';
 import { createLogger, format, transports } from 'winston';
 
@@ -30,8 +30,8 @@ const formatMessage = combine(
     (i) =>
       `${i.timestamp} [${i.level
         .toUpperCase()
-        .padEnd(5, ' ')}] [${formatContextName(i.context)}] ${i.message}`
-  )
+        .padEnd(5, ' ')}] [${formatContextName(i.context)}] ${i.message}`,
+  ),
 );
 
 export const logger = createLogger({
@@ -42,9 +42,9 @@ export const logger = createLogger({
       level: process.env.LOGGER_LEVEL || 'info',
       filename: path.resolve(ROOT_STORAGE, `backup.log`),
       maxFiles: 10,
-      maxsize: 5242880
-    })
-  ]
+      maxsize: 5242880,
+    }),
+  ],
 });
 
 if (isDevelopment) {

@@ -6,6 +6,6 @@ import { ChamThiService } from './chamthi.service';
 @Module({
   imports: [],
   controllers: [ChamThiController],
-  providers: [ChamThiService, ChamThiRepository]
+  providers: [ChamThiService, ChamThiRepository],
 })
-export class ChamThiModule { }
+export class ChamThiModule {}

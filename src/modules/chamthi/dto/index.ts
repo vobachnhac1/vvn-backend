@@ -1,1 +1,1 @@
-export * from "./chamthi.dto"
+export * from './chamthi.dto';

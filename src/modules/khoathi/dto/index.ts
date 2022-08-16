@@ -1,1 +1,1 @@
-export * from "./khoathi.dto"
+export * from './khoathi.dto';

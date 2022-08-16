@@ -2,85 +2,81 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 
 export class ChamThiDTO {
-
   @ApiProperty({ description: 'stt', default: 0 })
   ord_numbers: number;
 
-  @ApiProperty({ description: 'Mã khóa thi', default: "" })
-  khoathi_code: string; 
-  
-  @ApiProperty({ description: 'Họ tên', default: "" })
-  fullname: string;  
-  
-  @ApiProperty({ description: 'Mã thi', default: "" })
+  @ApiProperty({ description: 'Mã khóa thi', default: '' })
+  khoathi_code: string;
+
+  @ApiProperty({ description: 'Họ tên', default: '' })
+  fullname: string;
+
+  @ApiProperty({ description: 'Mã thi', default: '' })
   mathi: string;
 
-  @ApiProperty({ description: 'Đẳng cấp', default: "" })
-  level_name: string;  
-  
-  @ApiProperty({ description: 'Mã Đẳng cấp', default: "" })
-  level_code: string;  
+  @ApiProperty({ description: 'Đẳng cấp', default: '' })
+  level_name: string;
 
-  @ApiProperty({ description: 'Giới tính', default: "" })
+  @ApiProperty({ description: 'Mã Đẳng cấp', default: '' })
+  level_code: string;
+
+  @ApiProperty({ description: 'Giới tính', default: '' })
   gender: string;
-  
-  @ApiProperty({ description: 'Đơn vị', default: "" })
+
+  @ApiProperty({ description: 'Đơn vị', default: '' })
   team: string;
 
-  @ApiProperty({ description: 'Năm sinh', default: "" })
+  @ApiProperty({ description: 'Năm sinh', default: '' })
   dob: string;
 
-  @ApiProperty({ description: 'Điểm căn bản', default: "" })
+  @ApiProperty({ description: 'Điểm căn bản', default: '' })
   diem_cb: number;
 
-  @ApiProperty({ description: 'Điểm đối kháng', default: "" })
+  @ApiProperty({ description: 'Điểm đối kháng', default: '' })
   diem_dk: number;
 
-  @ApiProperty({ description: 'Điểm thể lực', default: "" })
+  @ApiProperty({ description: 'Điểm thể lực', default: '' })
   diem_tl: number;
 
-  @ApiProperty({ description: 'Điểm song luyện', default: "" })
+  @ApiProperty({ description: 'Điểm song luyện', default: '' })
   diem_sl: number;
 
-  @ApiProperty({ description: 'Điểm đơn luyện', default: "" })
+  @ApiProperty({ description: 'Điểm đơn luyện', default: '' })
   diem_dl: number;
 
-  @ApiProperty({ description: 'Điểm lý thuyết', default: "" })
-  diem_lt: number;  
-  
-  @ApiProperty({ description: 'Điểm Tổng', default: "" })
+  @ApiProperty({ description: 'Điểm lý thuyết', default: '' })
+  diem_lt: number;
+
+  @ApiProperty({ description: 'Điểm Tổng', default: '' })
   diem_tong: number;
 
-  @ApiProperty({ description: 'Hạng', default: "" })
+  @ApiProperty({ description: 'Hạng', default: '' })
   xephang: string;
 
-  @ApiProperty({ description: 'Ngày tạo', default: "" })
-  created_date: Date; 
-  
-  @ApiProperty({ description: 'Người tạo', default: "" })
+  @ApiProperty({ description: 'Ngày tạo', default: '' })
+  created_date: Date;
+
+  @ApiProperty({ description: 'Người tạo', default: '' })
   created_by: string;
 
-  @ApiProperty({ description: 'Ngày cập nhật', default: "" })
-  modified_date: Date; 
-  
-  @ApiProperty({ description: 'Người tạo', default: "" })
+  @ApiProperty({ description: 'Ngày cập nhật', default: '' })
+  modified_date: Date;
+
+  @ApiProperty({ description: 'Người tạo', default: '' })
   modified_by: string;
 
-  @ApiProperty({ description: 'Tài khoản', default: "" })
+  @ApiProperty({ description: 'Tài khoản', default: '' })
   username: string;
-
-
 }
 
 export class ListUpdate {
   @ApiProperty({ description: 'danh sách update', default: 0 })
-  data: ChamThiDTO[]
-  @ApiProperty({ description: 'Tài khoản', default: "" })
+  data: ChamThiDTO[];
+  @ApiProperty({ description: 'Tài khoản', default: '' })
   username: string;
 }
 export class UploadFile {
-  
-  @ApiProperty({ description: 'Tài khoản', default: "" })
+  @ApiProperty({ description: 'Tài khoản', default: '' })
   username: string;
 
   @ApiProperty({ description: 'danh sách', default: 0 })
@@ -91,23 +87,21 @@ export class UploadFile {
 }
 
 export class ScoreSpeed {
-
   @ApiProperty({ description: 'điểm thi', default: 0 })
-  diem: number; 
+  diem: number;
 
-  @ApiProperty({ description: 'Mã Nội dung thi', default: "" })
-  content_code: string; 
+  @ApiProperty({ description: 'Mã Nội dung thi', default: '' })
+  content_code: string;
 
-  @ApiProperty({ description: 'Mã khóa thi', default: "" })
-  khoathi_code: string; 
+  @ApiProperty({ description: 'Mã khóa thi', default: '' })
+  khoathi_code: string;
 
-  @ApiProperty({ description: 'Mã Đẳng cấp', default: "" })
-  level_code: string;  
+  @ApiProperty({ description: 'Mã Đẳng cấp', default: '' })
+  level_code: string;
 
-  @ApiProperty({ description: 'Người tạo', default: "" })
+  @ApiProperty({ description: 'Người tạo', default: '' })
   modified_by: string;
 
-  @ApiProperty({ description: 'Tài khoản', default: "" })
-  username: string
-
+  @ApiProperty({ description: 'Tài khoản', default: '' })
+  username: string;
 }

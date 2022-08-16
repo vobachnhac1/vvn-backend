@@ -1,24 +1,35 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, UseGuards, ValidationPipe } from "@nestjs/common";
-import { ApiResponse, ApiTags } from "@nestjs/swagger";
-import { ResponseObj } from "src/shared";
-import { GetCurrentUser } from "../login/decorators";
-import { TeamDTO } from "./dto";
-import { TeamService } from "./team.service";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ResponseObj } from 'src/shared';
+import { GetCurrentUser } from '../login/decorators';
+import { TeamDTO } from './dto';
+import { TeamService } from './team.service';
 
 @ApiTags('Quản lý câu lạc bộ')
 @Controller('team')
 export class TeamController {
-  constructor(private teamService: TeamService) { }
+  constructor(private teamService: TeamService) {}
 
   @Post('search')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'lấy danh sách câu lạc bộ'
+    description: 'lấy danh sách câu lạc bộ',
   })
   async searchTeam(
-    @GetCurrentUser(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
+    @GetCurrentUser(ValidationPipe) data: TeamDTO,
+  ): Promise<ResponseObj> {
     return this.teamService.searchTeam(data);
   }
 
@@ -27,7 +38,7 @@ export class TeamController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Thêm mới câu lạc bộ (đơn vị)'
+    description: 'Thêm mới câu lạc bộ (đơn vị)',
   })
   async insertTeam(@Body(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
     return this.teamService.insertTeam(data);
@@ -38,7 +49,7 @@ export class TeamController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Cập nhật câu lạc bộ (đơn vị)'
+    description: 'Cập nhật câu lạc bộ (đơn vị)',
   })
   async updatedTeam(@Body(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
     return this.teamService.updatedTeam(data);
@@ -49,7 +60,7 @@ export class TeamController {
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Xóa câu lạc bộ (đơn vị)'
+    description: 'Xóa câu lạc bộ (đơn vị)',
   })
   async deletedTeam(@Body(ValidationPipe) data: TeamDTO): Promise<ResponseObj> {
     return this.teamService.deletedTeam(data);

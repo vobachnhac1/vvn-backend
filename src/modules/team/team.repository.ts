@@ -1,9 +1,7 @@
+import { getConnectionManager, Repository } from 'typeorm';
+import { TeamDTO } from './dto';
 
-import { getConnectionManager, Repository } from "typeorm";
-import { TeamDTO } from "./dto";
-
-export class TeamRepository extends Repository<any>{
-
+export class TeamRepository extends Repository<any> {
   async searchTeam(payload: TeamDTO): Promise<TeamDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
@@ -75,8 +73,4 @@ export class TeamRepository extends Repository<any>{
     const someQuery = entityManager.query(sql);
     return someQuery;
   }
-
-
 }
-
-

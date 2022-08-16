@@ -1,9 +1,9 @@
 /* --------------------------------------------------------
-* Author Võ Bách Nhạc
-* Email vonhac.20394@gmail.com
-* Phone 0906.918.738
-* Created: 2022-03-30
-*------------------------------------------------------- */
+ * Author Võ Bách Nhạc
+ * Email vonhac.20394@gmail.com
+ * Phone 0906.918.738
+ * Created: 2022-03-30
+ *------------------------------------------------------- */
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
@@ -20,7 +20,7 @@ class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
- async validate(payload: ResponsePayLoad) {
+  async validate(payload: ResponsePayLoad) {
     console.log('payload: ', payload);
     return payload;
   }

@@ -1,9 +1,7 @@
+import { getConnectionManager, Repository } from 'typeorm';
+import { LoginDTO, TokenGenerationReq } from './dto';
 
-import { getConnectionManager, Repository } from "typeorm";
-import { LoginDTO, TokenGenerationReq } from "./dto";
-
-export class LoginRepository extends Repository<any>{
-
+export class LoginRepository extends Repository<any> {
   // đã dùng
   async registerAccount(payload: LoginDTO): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
@@ -65,8 +63,8 @@ export class LoginRepository extends Repository<any>{
     // AND password = '${password}'
     const someQuery = entityManager.query(sql);
     return someQuery;
-  }  
-  
+  }
+
   async searchAccount(payload: LoginDTO): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
@@ -90,7 +88,7 @@ export class LoginRepository extends Repository<any>{
     `;
     const someQuery = entityManager.query(sql);
     return someQuery;
-  } 
+  }
 
   async resetPassword(payload: TokenGenerationReq): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
@@ -107,19 +105,28 @@ export class LoginRepository extends Repository<any>{
   }
 
   async updateProfile(payload: LoginDTO): Promise<LoginDTO[]> {
-    const {roles, avatar_url, fullname, devices_info,email, phone, username, position}= payload
+    const {
+      roles,
+      avatar_url,
+      fullname,
+      devices_info,
+      email,
+      phone,
+      username,
+      position,
+    } = payload;
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
         UPDATE 
           binhtamao7ys_MOBILE.VVN_ACCOUNT
         SET
-         ${position?      "position     = '" + position     +"'" : ""},
-         ${email?         "email        = '" + email        +"'" : ""},
-         ${roles?         "roles        = '" + roles        +"'" : ""},
-         ${phone?         "phone        = '" + phone        +"'" : ""},
-         ${avatar_url?    "avatarUrl    = '" + avatar_url   +"'" : ""},
-         ${fullname?      "fullname     = '" + fullname     +"'" : ""},
-         ${devices_info?  "devicesInfo  = '" + devices_info +"'" : ""},
+         ${position ? "position     = '" + position + "'" : ''},
+         ${email ? "email        = '" + email + "'" : ''},
+         ${roles ? "roles        = '" + roles + "'" : ''},
+         ${phone ? "phone        = '" + phone + "'" : ''},
+         ${avatar_url ? "avatarUrl    = '" + avatar_url + "'" : ''},
+         ${fullname ? "fullname     = '" + fullname + "'" : ''},
+         ${devices_info ? "devicesInfo  = '" + devices_info + "'" : ''},
          updatedDate = now()
         WHERE upper(username) = upper('${username}')
     `;
@@ -128,20 +135,17 @@ export class LoginRepository extends Repository<any>{
   }
 
   // đã dùng
-  async updateToken(user_id:string , hash: string): Promise<LoginDTO[]> {
+  async updateToken(user_id: string, hash: string): Promise<LoginDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
         UPDATE 
           binhtamao7ys_MOBILE.VVN_ACCOUNT
         SET
-          ${hash?  "hash  = '" + hash +"'" : ""},
+          ${hash ? "hash  = '" + hash + "'" : ''},
           updatedDate = now()
         WHERE id = '${user_id}'
     `;
     const someQuery = entityManager.query(sql);
     return someQuery;
   }
-
 }
-
-

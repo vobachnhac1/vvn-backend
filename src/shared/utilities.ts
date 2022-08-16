@@ -1,9 +1,9 @@
 /* --------------------------------------------------------
-* Author Võ Bách Nhạc
-* Email vonhac.20394@gmail.com
-* Phone 0906.918.738
-* Created: 2022-03-30
-*------------------------------------------------------- */
+ * Author Võ Bách Nhạc
+ * Email vonhac.20394@gmail.com
+ * Phone 0906.918.738
+ * Created: 2022-03-30
+ *------------------------------------------------------- */
 
 import * as path from 'path';
 import * as fsx from 'fs-extra';

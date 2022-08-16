@@ -1,9 +1,7 @@
+import { getConnectionManager, Repository } from 'typeorm';
+import { KhoathiDTO } from './dto';
 
-import { getConnectionManager, Repository } from "typeorm";
-import { KhoathiDTO } from "./dto";
-
-export class KhoathiRepository extends Repository<any>{
-
+export class KhoathiRepository extends Repository<any> {
   async searchKhoathi(payload: KhoathiDTO): Promise<KhoathiDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
@@ -96,5 +94,3 @@ export class KhoathiRepository extends Repository<any>{
     return someQuery;
   }
 }
-
-

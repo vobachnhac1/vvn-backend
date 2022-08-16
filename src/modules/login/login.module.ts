@@ -8,12 +8,8 @@ import { LoginService } from './login.service';
 import JwtStrategy from './strategies/login.strategy';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(TypeOrmConfigMySQL2),
-    JwtModule.register({}),
-  ],
+  imports: [TypeOrmModule.forRoot(TypeOrmConfigMySQL2), JwtModule.register({})],
   controllers: [LoginController],
-  providers: [LoginService, LoginRepository, JwtStrategy ]
+  providers: [LoginService, LoginRepository, JwtStrategy],
 })
-export class LoginModule { }
-
+export class LoginModule {}
