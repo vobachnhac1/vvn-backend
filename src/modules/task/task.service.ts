@@ -25,7 +25,6 @@ export class TaskService {
     let response = new ResponseObj();
     try {
       const result = await this.taskRepo.getTaskByFilter(payload);
-
       response.message = 'Lấy danh sách task thành công';
       response.data = result;
       return response;
@@ -42,7 +41,45 @@ export class TaskService {
       const _time = moment().format('YYYY-MM-DD HH:mm:ss');
       console.log('_time: ', _time);
       // insert task info
-      let _taskInfo = task_info;
+      let _taskInfo = task_info as TaskInfoDTO;
+      // check valid procedureCode
+      const _rsCheckProcedure = await this.taskRepo.checkProcedureExist(
+        _taskInfo.procedure_code,
+      );
+      if (parseInt(_rsCheckProcedure['numberProcedure']) == 0) {
+        response.message = 'Mã quy trình không tồn tại trong hệ thống';
+        response.success = false;
+        return response;
+      } else {
+        if (
+          _rsCheckProcedure['numberProcedureDetail'].length !=
+          task_process.length
+        ) {
+          response.message = 'Số lượng task process không hợp lệ';
+          response.success = false;
+          return response;
+        } else {
+          // step_code và position của task so với quy trình
+          const _listProcedureDt = _rsCheckProcedure['numberProcedureDetail'];
+          let valid = 0;
+          for (let i = 0; i < task_process.length; i++) {
+            const _temp = _listProcedureDt.filter(
+              (item) =>
+                item.position == task_process[i].position &&
+                item.step_code == task_process[i].step_code,
+            );
+            valid += _temp.length;
+          }
+          // kiểm tra vị trí + mã step có hợp lệ không
+          if (valid != _listProcedureDt.length) {
+            response.message = 'Thứ tự task process không hợp lệ';
+            response.success = false;
+            return response;
+          }
+        }
+      }
+
+      // check number process insert with system
       _taskInfo.created_date = _time;
       const rsTaskInfo = await this.taskRepo.inserTaskInfo(_taskInfo);
       if (rsTaskInfo['insertId'] != '0') {
@@ -63,6 +100,7 @@ export class TaskService {
       } else {
         response.message = 'Tạo task thất bại';
       }
+      response.data = _rsCheckProcedure;
       return response;
     } catch (error) {
       this.logger.error('created task false', error);
@@ -162,7 +200,7 @@ export class TaskService {
     let resp = new ResponseObj();
     // const _time = moment().format('YYYY-MM-DD HH:mm:ss');
     try {
-      const rsList = await this.taskRepo.getListProcedure();
+      const rsList = await this.taskRepo.getListProcedure(null);
       resp.data = rsList;
       resp.message = 'Get List Procedure thành công';
       return resp;

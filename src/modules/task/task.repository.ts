@@ -59,11 +59,10 @@ export class TaskRepository extends Repository<any> {
 
     let someQuery = (await entityManager.query(sql)) as TaskInfoDTO[];
     for (let i = 0; i < someQuery.length; i++) {
-      sqlProcess += ` AND TASK_ID = '${someQuery[i].task_id}'`;
-      const _list = (await entityManager.query(sqlProcess)) as TaskProcessDTO[];
+      const _sql = sqlProcess + ` AND TASK_ID = '${someQuery[i].task_id}'`;
+      const _list = (await entityManager.query(_sql)) as TaskProcessDTO[];
       someQuery[i].listTaskProcess = _list;
     }
-
     return someQuery;
   }
 
@@ -132,9 +131,9 @@ export class TaskRepository extends Repository<any> {
     return someQuery;
   }
 
-  async getListProcedure(): Promise<ProcedureDTO[]> {
+  async getListProcedure(procedure_code: number): Promise<ProcedureDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
-    const sql = `
+    let sql = `
       SELECT 
         ROW_NUMBER() OVER (ORDER BY ID DESC) AS ord_numbers,
         ID                     AS procedure_code, 
@@ -147,16 +146,19 @@ export class TaskRepository extends Repository<any> {
       FROM 
         binhtamao7ys_MOBILE.VVN_TASK_PROCEDURE
     `;
+    if (procedure_code) {
+      sql += ` WHERE ID = '${procedure_code}'`;
+    }
 
     let sql_detail = ` 
       SELECT 
         ROW_NUMBER() OVER (ORDER BY ID asc) AS ord_numbers,
         ID                     AS procedure_detail_code, 
         PROCEDURE_ID           AS procedure_code, 
-        PROCEDURE_DETAIL_NAME         AS procedure_detail_name, 
+        PROCEDURE_DETAIL_NAME  AS procedure_detail_name, 
         STATUS                 AS status, 
-        STEP_CODE                 AS step_code, 
-        POSITION                 AS position, 
+        STEP_CODE              AS step_code, 
+        POSITION               AS position, 
         CREATED_DATE           AS created_date, 
         CREATED_BY             AS created_by,         
         UPDATED_DATE           AS updated_date, 
@@ -167,11 +169,39 @@ export class TaskRepository extends Repository<any> {
         `;
     let someQuery = (await entityManager.query(sql)) as ProcedureDTO[];
     for (let i = 0; i < someQuery.length; i++) {
-      sql_detail += ` AND PROCEDURE_ID ='${someQuery[i].procedure_code}'`;
-      const _list = await entityManager.query(sql_detail);
+      const _sql =
+        sql_detail + ` AND PROCEDURE_ID ='${someQuery[i].procedure_code}'`;
+      const _list = await entityManager.query(_sql);
       someQuery[i].listProcedureDt = _list;
     }
     return someQuery;
+  }
+
+  async checkProcedureExist(procedure_code: number): Promise<any> {
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    let sql = `
+      SELECT COUNT(*) AS NUM_EXIST FROM VVN_TASK_PROCEDURE WHERE ID = '${procedure_code}'
+    `;
+    let rsProcedure = await entityManager.query(sql);
+    let rsProcedureDetail;
+
+    if (rsProcedure.length > 0) {
+      let _sql = `
+        SELECT
+          STEP_CODE as step_code,
+          POSITION as position
+        FROM 
+          VVN_TASK_PROCEDURE_DETAIL 
+        WHERE PROCEDURE_ID = '${procedure_code}'
+      `;
+      rsProcedureDetail = (await entityManager.query(
+        _sql,
+      )) as ProcedureDetailDTO[];
+    }
+    return {
+      numberProcedure: rsProcedure[0].NUM_EXIST || '0',
+      numberProcedureDetail: rsProcedureDetail,
+    };
   }
 
   async getListProcedureDetail(
