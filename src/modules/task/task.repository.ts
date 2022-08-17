@@ -86,6 +86,20 @@ export class TaskRepository extends Repository<any> {
     const someQuery = entityManager.query(sql);
     return someQuery;
   }
+  async updateTaskInfo(payload: TaskInfoDTO): Promise<TaskInfoDTO[]> {
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    const sql = `
+      UPDATE 
+        VVN_TASK_INFO
+      SET
+        POSITION ='${payload.current_position}',
+        UPDATED_DATE ='${payload.updated_date}',
+        UPDATED_BY ='${payload.updated_by}'
+      WHERE ID = '${payload.task_id}'
+    `;
+    const someQuery = entityManager.query(sql);
+    return someQuery;
+  }
 
   async inserTaskProcess(payload: TaskProcessDTO): Promise<TaskProcessDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
@@ -112,6 +126,43 @@ export class TaskRepository extends Repository<any> {
     return someQuery;
   }
 
+  //  checkValidSubmitTask
+  async checkValidSubmitTask(
+    payload: TaskProcessDTO,
+  ): Promise<TaskProcessDTO[]> {
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    const sql = `
+      SELECT
+        ID as task_process_id,
+        POSITION as position,
+        USER_HOLD as user_hold
+      FROM 
+        VVN_TASK_PROCESS
+      WHERE 1 = 1
+      AND TASK_ID ='${payload.task_id}'
+      AND STEP_CODE ='${payload.step_code}'
+      AND PROCEDURE_ID ='${payload.procedure_id}'
+    `;
+    const someQuery = entityManager.query(sql);
+    console.log('sql: ', sql);
+    return someQuery;
+  }
+  async updateTaskProcess(payload: TaskProcessDTO): Promise<TaskProcessDTO[]> {
+    const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
+    const sql = `
+      UPDATE 
+        VVN_TASK_PROCESS
+      SET
+        CONTENT ='${payload.content_submit}',
+        UPDATED_DATE ='${payload.updated_date}',
+        UPDATED_BY ='${payload.updated_by}'
+      WHERE ID = '${payload.task_process_id}'
+    `;
+    const someQuery = entityManager.query(sql);
+    console.log('sql: ', sql);
+    return someQuery;
+  }
+
   // tạo mới quy trình task
   async insertProcedure(payload: ProcedureDTO): Promise<ProcedureDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
@@ -131,12 +182,12 @@ export class TaskRepository extends Repository<any> {
     return someQuery;
   }
 
-  async getListProcedure(procedure_code: number): Promise<ProcedureDTO[]> {
+  async getListProcedure(procedure_id: number): Promise<ProcedureDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     let sql = `
       SELECT 
         ROW_NUMBER() OVER (ORDER BY ID DESC) AS ord_numbers,
-        ID                     AS procedure_code, 
+        ID                     AS procedure_id, 
         PROCEDURE_NAME         AS procedure_name, 
         STATUS                 AS status, 
         CREATED_DATE           AS created_date, 
@@ -146,15 +197,15 @@ export class TaskRepository extends Repository<any> {
       FROM 
         binhtamao7ys_MOBILE.VVN_TASK_PROCEDURE
     `;
-    if (procedure_code) {
-      sql += ` WHERE ID = '${procedure_code}'`;
+    if (procedure_id) {
+      sql += ` WHERE ID = '${procedure_id}'`;
     }
 
     let sql_detail = ` 
       SELECT 
         ROW_NUMBER() OVER (ORDER BY ID asc) AS ord_numbers,
         ID                     AS procedure_detail_code, 
-        PROCEDURE_ID           AS procedure_code, 
+        PROCEDURE_ID           AS procedure_id, 
         PROCEDURE_DETAIL_NAME  AS procedure_detail_name, 
         STATUS                 AS status, 
         STEP_CODE              AS step_code, 
@@ -170,17 +221,17 @@ export class TaskRepository extends Repository<any> {
     let someQuery = (await entityManager.query(sql)) as ProcedureDTO[];
     for (let i = 0; i < someQuery.length; i++) {
       const _sql =
-        sql_detail + ` AND PROCEDURE_ID ='${someQuery[i].procedure_code}'`;
+        sql_detail + ` AND PROCEDURE_ID ='${someQuery[i].procedure_id}'`;
       const _list = await entityManager.query(_sql);
       someQuery[i].listProcedureDt = _list;
     }
     return someQuery;
   }
 
-  async checkProcedureExist(procedure_code: number): Promise<any> {
+  async checkProcedureExist(procedure_id: number): Promise<any> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     let sql = `
-      SELECT COUNT(*) AS NUM_EXIST FROM VVN_TASK_PROCEDURE WHERE ID = '${procedure_code}'
+      SELECT COUNT(*) AS NUM_EXIST FROM VVN_TASK_PROCEDURE WHERE ID = '${procedure_id}'
     `;
     let rsProcedure = await entityManager.query(sql);
     let rsProcedureDetail;
@@ -192,7 +243,7 @@ export class TaskRepository extends Repository<any> {
           POSITION as position
         FROM 
           VVN_TASK_PROCEDURE_DETAIL 
-        WHERE PROCEDURE_ID = '${procedure_code}'
+        WHERE PROCEDURE_ID = '${procedure_id}'
       `;
       rsProcedureDetail = (await entityManager.query(
         _sql,
@@ -205,14 +256,14 @@ export class TaskRepository extends Repository<any> {
   }
 
   async getListProcedureDetail(
-    procedure_code: number,
+    procedure_id: number,
   ): Promise<ProcedureDetailDTO[]> {
     const entityManager = getConnectionManager().get('MYSQL_CONNECTION_DEMO');
     const sql = `
     SELECT 
       ROW_NUMBER() OVER (ORDER BY ID asc) AS ord_numbers,
       ID                     AS procedure_detail_code, 
-      PROCEDURE_ID           AS procedure_code, 
+      PROCEDURE_ID           AS procedure_id, 
       PROCEDURE_DETAIL_NAME         AS procedure_detail_name, 
       STATUS                 AS status, 
       STEP_CODE                 AS step_code, 
@@ -224,7 +275,7 @@ export class TaskRepository extends Repository<any> {
     FROM 
       binhtamao7ys_MOBILE.VVN_TASK_PROCEDURE_DETAIL
     WHERE 1 = 1
-    AND PROCEDURE_ID ='${procedure_code}'
+    AND PROCEDURE_ID ='${procedure_id}'
     `;
     console.log('sql: ', sql);
     let someQuery = entityManager.query(sql);
@@ -240,7 +291,7 @@ export class TaskRepository extends Repository<any> {
       ( PROCEDURE_ID, PROCEDURE_DETAIL_NAME, STEP_CODE, STATUS, POSITION, CREATED_BY, CREATED_DATE)
     VALUES
       (
-        '${payload.procedure_code}', 
+        '${payload.procedure_id}', 
         '${payload.procedure_detail_name}', 
         '${payload.step_code}', 
         '${payload.status}', 

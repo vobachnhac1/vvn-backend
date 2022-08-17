@@ -9,6 +9,7 @@ import {
   TaskDTO,
   TaskFileDTO,
   TaskInfoDTO,
+  TaskProcessDTO,
 } from './dto';
 import { TaskRepository } from './task.repository';
 const __ = require('lodash');
@@ -44,7 +45,7 @@ export class TaskService {
       let _taskInfo = task_info as TaskInfoDTO;
       // check valid procedureCode
       const _rsCheckProcedure = await this.taskRepo.checkProcedureExist(
-        _taskInfo.procedure_code,
+        _taskInfo.procedure_id,
       );
       if (parseInt(_rsCheckProcedure['numberProcedure']) == 0) {
         response.message = 'Mã quy trình không tồn tại trong hệ thống';
@@ -86,6 +87,7 @@ export class TaskService {
         let _taskProcess = task_process;
         for (let i = 0; i < _taskProcess.length; i++) {
           _taskProcess[i].task_id = rsTaskInfo['insertId'];
+          _taskProcess[i].procedure_id = _taskInfo.procedure_id;
           _taskProcess[i].created_date = _time;
           const _rsTaskProcess = await this.taskRepo.inserTaskProcess(
             _taskProcess[i],
@@ -105,6 +107,43 @@ export class TaskService {
     } catch (error) {
       this.logger.error('created task false', error);
       return response;
+    }
+  }
+  // submit task (next step)
+  async submitTask(data: TaskProcessDTO): Promise<ResponseObj> {
+    const resp = new ResponseObj();
+    const _time = moment().format('YYYY-MM-DD HH:mm:ss');
+    try {
+      // check taskId, check procedure_id, step_code
+      const reCheck = await this.taskRepo.checkValidSubmitTask(data);
+      if (reCheck.length == 0) {
+        resp.message = 'Dữ liệu Submit Task không đúng';
+        resp.success = false;
+        return resp;
+      }
+      // update taskprocess and update current_position;
+      data.finished_date = _time;
+      data.updated_date = _time;
+
+      const uptTaskProcess = await this.taskRepo.updateTaskProcess(data);
+      if (uptTaskProcess['affectedRows'] == 1) {
+        let _params = new TaskInfoDTO();
+        _params.updated_date = _time;
+        _params.task_id = data.task_id;
+        _params.updated_by = data.updated_by;
+        _params.current_position = reCheck[0].position + 1;
+        const uptTaskInfo = await this.taskRepo.updateTaskInfo(_params);
+        resp.message = 'Chuyển bước thành công';
+        resp.success = true;
+      } else {
+        resp.message = 'Chuyển bước thất bại';
+        resp.success = false;
+      }
+
+      return resp;
+    } catch (error) {
+      console.log('error: ', error);
+      return resp;
     }
   }
 
@@ -180,7 +219,7 @@ export class TaskService {
         // insert procedure detail
         for (let i = 0; i < payload.listProcedureDt.length; i++) {
           payload.listProcedureDt[i].created_date = _time;
-          payload.listProcedureDt[i].procedure_code =
+          payload.listProcedureDt[i].procedure_id =
             rsInsertProcedure['insertId'];
           const _insertDt = await this.taskRepo.insertProcedureDetail(
             payload.listProcedureDt[i],
@@ -209,11 +248,11 @@ export class TaskService {
     }
   }
 
-  async getListProcedureDetail(procedure_code: number): Promise<ResponseObj> {
+  async getListProcedureDetail(procedure_id: number): Promise<ResponseObj> {
     let resp = new ResponseObj();
     // const _time = moment().format('YYYY-MM-DD HH:mm:ss');
     try {
-      const rsList = await this.taskRepo.getListProcedureDetail(procedure_code);
+      const rsList = await this.taskRepo.getListProcedureDetail(procedure_id);
       resp.data = rsList;
       resp.message = 'Get List Procedure Detail thành công';
       return resp;

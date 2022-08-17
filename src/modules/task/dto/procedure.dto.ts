@@ -5,7 +5,7 @@ export class ProcedureDTO {
   ord_numbers: number;
 
   @ApiProperty({ description: 'Mã', default: '' })
-  procedure_code: number;
+  procedure_id: number;
 
   @ApiProperty({ description: 'Tên', default: '' })
   procedure_name: string;
@@ -34,7 +34,7 @@ export class ProcedureDetailDTO {
   ord_numbers: number;
 
   @ApiProperty({ description: 'Mã', default: '' })
-  procedure_code: number;
+  procedure_id: number;
 
   @ApiProperty({ description: 'Mã chi tiết', default: '' })
   procedure_detail_code: number;

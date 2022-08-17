@@ -5,7 +5,7 @@ export class TaskInfoDTO {
   ord_numbers: number;
 
   @ApiProperty({ description: 'Mã Quy trình áp dụng task', default: '' })
-  procedure_code: number;
+  procedure_id: number;
 
   @ApiProperty({ description: 'Mã task', default: '' })
   task_id: number;
@@ -42,6 +42,9 @@ export class TaskInfoDTO {
 
   @ApiProperty({ description: 'Chủ đề/ dự án', default: '' })
   topic_id: string;
+
+  @ApiProperty({ description: 'Bước hiện tại', default: '' })
+  current_position: number;
 
   listTaskProcess: TaskProcessDTO[];
 }

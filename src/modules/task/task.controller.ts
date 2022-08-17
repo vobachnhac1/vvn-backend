@@ -142,17 +142,30 @@ export class TaskController {
     return this.taskService.getListProcedure(null);
   }
 
-  @Get('procedure-detail/:procedure_code')
+  @Get('procedure-detail/:procedure_id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
     status: 200,
-    description: 'Lấy danh sách quy trình chi tiết theo procedure_code',
+    description: 'Lấy danh sách quy trình chi tiết theo procedure_id',
   })
   async getListProcedureDetail(
-    @Param('procedure_code') procedure_code: number,
+    @Param('procedure_id') procedure_id: number,
   ): Promise<ResponseObj> {
-    console.log('procedure_code: ', procedure_code);
-    return this.taskService.getListProcedureDetail(procedure_code);
+    return this.taskService.getListProcedureDetail(procedure_id);
+  }
+
+  /// SUBMIT TASK
+  @Post('submit-task')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
+    status: 200,
+    description: 'Submit Task (Next Step)',
+  })
+  async SubmitTask(
+    @Body(ValidationPipe) data: TaskProcessDTO,
+  ): Promise<ResponseObj> {
+    return this.taskService.submitTask(data);
   }
 }
