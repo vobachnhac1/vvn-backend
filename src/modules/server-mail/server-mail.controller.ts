@@ -22,12 +22,10 @@ import { MailService } from './server-mail.service';
 export class MailController {
   constructor(
     private mailerService: MailerService,
-    private mailService: MailService
+    private mailService: MailService,
+  ) {}
 
-
-  ) { }
-
-  @Get('send-mail')
+  @Get('send')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     // type: SwaggerSegmentResSimple, /// mô tả response trả về dạng object
@@ -35,18 +33,24 @@ export class MailController {
     description: 'Send Email',
   })
   async sendmail(): Promise<any> {
-    return this.mailService.example();
+    // const response = await this.mailerService.sendMail({
+    //   to: 'vobachnhac@gmail.com', // list of receivers
+    //   from: 'noreply.teamit2020@gmail.com', // sender address
+    //   subject: 'Testing Nest MailerModule ✔', // Subject line
+    //   text: 'welcome', // plaintext body
+    //   html: '<b>welcome</b>', // HTML body content
+    // })
+    return this.mailService.example3();
   }
-
 
   @Get('plain-text-email')
   async plainTextEmail() {
-  // async plainTextEmail(@Query('toemail') toEmail) {
+    // async plainTextEmail(@Query('toemail') toEmail) {
     var response = await this.mailerService.sendMail({
-      to:'vobachnhac@gmail.com',
-      from:"noreply.teamit2020@gmail.com",
+      to: 'vobachnhac@gmail.com',
+      from: 'noreply.teamit2020@gmail.com',
       subject: 'Plain Text Email ✔',
-      text: 'Welcome NestJS Email Sending Tutorial', 
+      text: 'Welcome NestJS Email Sending Tutorial',
     });
     return response;
   }
@@ -59,25 +63,26 @@ export class MailController {
       subject: 'HTML Dynamic Template',
       template: 'superhero',
       context: {
-        superHero:superHero
+        superHero: superHero,
       },
-      
     });
     return 'success';
   }
 
   @Get('file-attachment')
-  async fileAttachement(@Query('toemail') toemail){
+  async fileAttachement(@Query('toemail') toemail) {
     var response = await this.mailerService.sendMail({
       to: toemail,
       from: 'noreply.teamit2020@gmail.com',
       subject: 'File Attachment',
-      html: "<h1>File Attachment</h1>",
-      attachments:[{
-        path:    join(__dirname,'mails','bike-1.webp'),
-        filename:'1.webp',
-        contentDisposition:"attachment"
-      }]
+      html: '<h1>File Attachment</h1>',
+      attachments: [
+        {
+          path: join(__dirname, 'mails', 'bike-1.webp'),
+          filename: '1.webp',
+          contentDisposition: 'attachment',
+        },
+      ],
     });
     return 'success';
   }

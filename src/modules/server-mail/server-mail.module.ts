@@ -12,12 +12,14 @@ import { MailController } from './server-mail.controller';
     MailModule,
     MailerModule.forRootAsync({
       useFactory: async (config: ConfigService) => {
-        return ({
+        console.log('MailerModule: ', resolve(__dirname, '.', '../../mails'));
+        return {
           transport: {
             host: 'smtp.gmail.com',
+            secure: true,
             auth: {
               user: 'noreply.teamit2020@gmail.com',
-              pass: 'Team@2020',
+              pass: 'qpsbysddvycmofwy', //
             },
           },
           template: {
@@ -27,7 +29,7 @@ import { MailController } from './server-mail.controller';
               strict: true,
             },
           },
-        })
+        };
       },
     }),
   ],
@@ -35,4 +37,4 @@ import { MailController } from './server-mail.controller';
   providers: [MailService],
   exports: [MailService], // 👈 export for DI
 })
-export class MailModule { }
+export class MailModule {}

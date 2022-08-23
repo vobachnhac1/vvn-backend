@@ -7,7 +7,7 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RouterModule } from '@nestjs/core';
-import { ConfigModule,  } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { configuration } from './config';
 import { PassportModule } from '@nestjs/passport';
@@ -35,7 +35,7 @@ import { MailModule } from './modules/server-mail/server-mail.module';
     ChamThiModule,
     LoginModule,
     TaskModule,
-    MailModule
+    MailModule,
   ],
   // controllers: [AppController],
   providers: [AppService],
